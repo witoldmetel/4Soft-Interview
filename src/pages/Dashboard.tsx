@@ -1,13 +1,13 @@
-import { Container, Typography, Autocomplete, TextField, CircularProgress } from '@mui/material';
+import { Container, Typography, Autocomplete, TextField, CircularProgress, Box, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
+import { AppCard } from 'src/core/components';
 
 import { useAppContext } from 'src/hooks/useAppContext';
 
 export default function Dashboard() {
   const classes = useStyles();
   const { data, isLoading } = useAppContext();
-  console.log('file: Dashboard.tsx ~ line 9 ~ Dashboard ~ appListData', data);
 
   // @todo: Add proper type here
   const [observaleData, setObservableData] = useState([]) as any;
@@ -15,6 +15,7 @@ export default function Dashboard() {
   // @todo: Add proper type here
   const onChange = (newData: any) => {
     if (newData) {
+      // @todo: use lodash unique to get unique data
       setObservableData((prevData: any) => [...prevData, newData]);
     }
   };
@@ -35,8 +36,23 @@ export default function Dashboard() {
         options={data}
         getOptionLabel={(option) => option.name}
         sx={{ width: 300, marginTop: 2 }}
-        renderInput={(params) => <TextField {...params} label="App" />}
+        renderOption={(props, option) => (
+          <Box component="li" {...props} key={option.id}>
+            {option.name}
+          </Box>
+        )}
+        renderInput={(params) => {
+          return <TextField {...params} label="App" />;
+        }}
       />
+      {observaleData && (
+        <Grid className={classes.cardsWrapper} container spacing={5} alignItems="flex-start">
+          {/* @todo: Add proper type */}
+          {observaleData.map((card: any) => (
+            <AppCard key={card.id} {...card} onClick={(cardTitle) => console.log(cardTitle)} />
+          ))}
+        </Grid>
+      )}
     </Container>
   );
 }
@@ -47,5 +63,8 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'column',
     alignItems: 'center',
     padding: 40
+  },
+  cardsWrapper: {
+    padding: 30
   }
 }));
