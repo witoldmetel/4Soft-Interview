@@ -1,7 +1,7 @@
 import { Container, Typography, Autocomplete, TextField, CircularProgress, Box, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
-import { AppCard } from 'src/core/components';
+import { AppCard, DetailsDialog } from 'src/core/components';
 
 import { useAppContext } from 'src/hooks/useAppContext';
 
@@ -11,6 +11,10 @@ export default function Dashboard() {
 
   // @todo: Add proper type here
   const [observaleData, setObservableData] = useState([]) as any;
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+
+  const toggleDialog = (flag: boolean) => setOpenDetailsDialog(flag);
 
   // @todo: Add proper type here
   const onChange = (newData: any) => {
@@ -49,9 +53,19 @@ export default function Dashboard() {
         <Grid className={classes.cardsWrapper} container spacing={5} alignItems="flex-start">
           {/* @todo: Add proper type */}
           {observaleData.map((card: any) => (
-            <AppCard key={card.id} {...card} onClick={(cardTitle) => console.log(cardTitle)} />
+            <AppCard
+              key={card.id}
+              {...card}
+              onClick={() => {
+                toggleDialog(true);
+                setSelectedCard(card.id);
+              }}
+            />
           ))}
         </Grid>
+      )}
+      {selectedCard && (
+        <DetailsDialog cardId={selectedCard} open={openDetailsDialog} onClose={() => toggleDialog(false)} />
       )}
     </Container>
   );
