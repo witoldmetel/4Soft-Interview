@@ -1,4 +1,7 @@
 export type AppContextType = {
   // @todo: Add proper type
-  appListData: any;
+  data: any;
+  isLoading: boolean;
+  isError: boolean;
+  isFetching: boolean;
 };
