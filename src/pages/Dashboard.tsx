@@ -1,8 +1,12 @@
 import { Container, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
+import { useAppContext } from 'src/hooks/useAppContext';
+
 export default function Dashboard() {
   const classes = useStyles();
+  const { appListData } = useAppContext();
+  console.log('file: Dashboard.tsx ~ line 9 ~ Dashboard ~ appListData', appListData);
 
   return (
     <Container className={classes.root} maxWidth="lg" component="main">
